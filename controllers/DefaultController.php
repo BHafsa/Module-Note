@@ -1,6 +1,6 @@
 <?php
 
-namespace humhub\modules\Note\controllers;
+namespace humhub\modules\note\controllers;
 
 class DefaultController extends \yii\web\Controller
 {

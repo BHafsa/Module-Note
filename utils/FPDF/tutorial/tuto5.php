@@ -1,9 +1,9 @@
 <?php
-require('../fpdf.php');
+require('../FPDF.php');
 
 class PDF extends FPDF
 {
-// Chargement des données
+// Chargement des donnï¿½es
 function LoadData($file)
 {
 	// Lecture des lignes du fichier
@@ -17,11 +17,11 @@ function LoadData($file)
 // Tableau simple
 function BasicTable($header, $data)
 {
-	// En-tête
+	// En-tï¿½te
 	foreach($header as $col)
 		$this->Cell(40,7,$col,1);
 	$this->Ln();
-	// Données
+	// Donnï¿½es
 	foreach($data as $row)
 	{
 		foreach($row as $col)
@@ -30,16 +30,16 @@ function BasicTable($header, $data)
 	}
 }
 
-// Tableau amélioré
+// Tableau amï¿½liorï¿½
 function ImprovedTable($header, $data)
 {
 	// Largeurs des colonnes
 	$w = array(40, 35, 45, 40);
-	// En-tête
+	// En-tï¿½te
 	for($i=0;$i<count($header);$i++)
 		$this->Cell($w[$i],7,$header[$i],1,0,'C');
 	$this->Ln();
-	// Données
+	// Donnï¿½es
 	foreach($data as $row)
 	{
 		$this->Cell($w[0],6,$row[0],'LR');
@@ -52,16 +52,16 @@ function ImprovedTable($header, $data)
 	$this->Cell(array_sum($w),0,'','T');
 }
 
-// Tableau coloré
+// Tableau colorï¿½
 function FancyTable($header, $data)
 {
-	// Couleurs, épaisseur du trait et police grasse
+	// Couleurs, ï¿½paisseur du trait et police grasse
 	$this->SetFillColor(255,0,0);
 	$this->SetTextColor(255);
 	$this->SetDrawColor(128,0,0);
 	$this->SetLineWidth(.3);
 	$this->SetFont('','B');
-	// En-tête
+	// En-tï¿½te
 	$w = array(40, 35, 45, 40);
 	for($i=0;$i<count($header);$i++)
 		$this->Cell($w[$i],7,$header[$i],1,0,'C',true);
@@ -70,7 +70,7 @@ function FancyTable($header, $data)
 	$this->SetFillColor(224,235,255);
 	$this->SetTextColor(0);
 	$this->SetFont('');
-	// Données
+	// Donnï¿½es
 	$fill = false;
 	foreach($data as $row)
 	{
@@ -88,8 +88,8 @@ function FancyTable($header, $data)
 
 $pdf = new PDF();
 // Titres des colonnes
-$header = array('Pays', 'Capitale', 'Superficie (km²)', 'Pop. (milliers)');
-// Chargement des données
+$header = array('Pays', 'Capitale', 'Superficie (kmï¿½)', 'Pop. (milliers)');
+// Chargement des donnï¿½es
 $data = $pdf->LoadData('pays.txt');
 $pdf->SetFont('Arial','',14);
 $pdf->AddPage();

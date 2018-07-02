@@ -1,5 +1,5 @@
 <?php
-require('../fpdf.php');
+require('../FPDF.php');
 
 class PDF extends FPDF
 {
@@ -26,13 +26,13 @@ function Header()
 
 function Footer()
 {
-	// Positionnement à 1,5 cm du bas
+	// Positionnement ï¿½ 1,5 cm du bas
 	$this->SetY(-15);
 	// Arial italique 8
 	$this->SetFont('Arial','I',8);
 	// Couleur du texte en gris
 	$this->SetTextColor(128);
-	// Numéro de page
+	// Numï¿½ro de page
 	$this->Cell(0,10,'Page '.$this->PageNo(),0,0,'C');
 }
 
@@ -54,7 +54,7 @@ function CorpsChapitre($fichier)
 	$txt = file_get_contents($fichier);
 	// Times 12
 	$this->SetFont('Times','',12);
-	// Sortie du texte justifié
+	// Sortie du texte justifiï¿½
 	$this->MultiCell(0,5,$txt);
 	// Saut de ligne
 	$this->Ln();
@@ -75,7 +75,7 @@ $pdf = new PDF();
 $titre = 'Vingt mille lieues sous les mers';
 $pdf->SetTitle($titre);
 $pdf->SetAuthor('Jules Verne');
-$pdf->AjouterChapitre(1,'UN ÉCUEIL FUYANT','20k_c1.txt');
+$pdf->AjouterChapitre(1,'UN ï¿½CUEIL FUYANT','20k_c1.txt');
 $pdf->AjouterChapitre(2,'LE POUR ET LE CONTRE','20k_c2.txt');
 $pdf->Output();
 ?>

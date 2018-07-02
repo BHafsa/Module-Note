@@ -1,6 +1,6 @@
 <?php
 
-namespace humhub\modules\Note;
+namespace humhub\modules\note;
 
 class Module extends \humhub\components\Module
 {

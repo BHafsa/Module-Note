@@ -6,7 +6,7 @@
 * Date:    2015-12-20                                                          *
 * Author:  Olivier PLATHEY                                                     *
 *******************************************************************************/
-namespace humhub\modules\Note\utils\FPDF;
+namespace humhub\modules\note\utils\FPDF;
 
 define('FPDF_VERSION','1.81');
 

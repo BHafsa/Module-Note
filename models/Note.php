@@ -1,6 +1,6 @@
 <?php
 
-namespace humhub\modules\Note\models;
+namespace humhub\modules\note\models;
 
 use Yii;
 
@@ -42,6 +42,6 @@ class Etudiant extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            
+            ];
     }
 }

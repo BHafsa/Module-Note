@@ -1,6 +1,6 @@
 <?php
 
-namespace humhub\modules\Note\controllers;
+namespace humhub\modules\note\controllers;
 
 class AdminController extends \humhub\modules\admin\components\Controller
 {
