@@ -18,7 +18,7 @@ class m180702_170953_create_educational_unit_table extends Migration
         $this->createTable('educational_unit', [
             'educational_unit_id' => $this->primaryKey(),
             'code' => $this->string(10)->notNull(),
-            'nature' => $this->string(10)->notNull(),
+            'nature' => $this->string(30)->notNull(),
             'semester' => $this->boolean(),
             'level_id' => $this->integer()->notNull(),
         ]);

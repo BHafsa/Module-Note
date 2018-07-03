@@ -15,13 +15,13 @@ class Events extends \yii\base\Object
      */
     public static function onTopMenuInit($event)
     {
-        $event->sender->addItem(array(
-            'label' => "Note",
+        $event->sender->addItem([
+            'label' => 'Note',
             'icon' => '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>',
             'url' => Url::to(['/note/etudiant']),// a remplacer par le teste
             'sortOrder' => 99999,
             'isActive' => (Yii::$app->controller->module && Yii::$app->controller->module->id == 'Note' && Yii::$app->controller->id == 'etudiant'),
-        ));
+        ]);
     }
 
 
@@ -32,15 +32,19 @@ class Events extends \yii\base\Object
      */
     public static function onAdminMenuInit($event)
     {
-        $event->sender->addItem(array(
-            'label' => "Note",
+        $event->sender->addItem([
+            'label' => 'Note',
             'url' => Url::to(['/note/admin']),
             'group' => 'manage',
             'icon' => '<i class="fa fa-pencil-square-o" aria-hidden="true"></i>',
             'isActive' => (Yii::$app->controller->module && Yii::$app->controller->module->id == 'Note' && Yii::$app->controller->id == 'admin'),
             'sortOrder' => 99999,
-        ));
+        ]);
     }
 
+    public static function onConsoleApplicationInit($event)
+    {
+        $application = $event->sender;
+        $application->controllerMap['note'] = commands\NoteController::class;
+    }
 }
-
