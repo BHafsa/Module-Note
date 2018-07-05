@@ -14,7 +14,6 @@ use yii\db\ActiveRecord;
  * @property integer $semester
  * @property integer $level_id
  *
- * @property Course[] $courses
  * @property Level $level
  */
 class EducationalUnit extends ActiveRecord

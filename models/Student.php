@@ -21,6 +21,9 @@ use yii\db\ActiveRecord;
  *
  * @property ClassGroup $classGroup
  * @property User $user
+ * @property array $schoolYears
+ * @property string $year
+ * @property string $option
  */
 class Student extends ActiveRecord
 {
@@ -82,4 +85,134 @@ class Student extends ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    /**
+     * @return array|ActiveRecord[]
+     */
+    public function getSchoolYears()
+    {
+        return GradeReport::find()->asArray()
+            ->select(['date'])
+            ->where(['student_id' => $this->student_id])
+            ->groupBy('date')
+            ->all();
+    }
+
+    public function getYear()
+    {
+        return $this->classGroup->level->year;
+    }
+
+    public function getOption()
+    {
+        return $this->classGroup->level->option;
+    }
+
+    /**
+     * @param $schoolYear
+     * @param string $semester
+     * @return array
+     */
+    public function getCourses($schoolYear, $semester = '')
+    {
+        return $this->getCoursesQuery($schoolYear, $semester)->all();
+    }
+
+
+    public function calculateSemesterScore($schoolYear, $semester = '')
+    {
+        return round($this->getCoursesQuery($schoolYear, $semester)
+            ->select('sum(value * coefficient) / sum(coefficient) as score')
+            ->createCommand()->queryScalar(), 2);
+    }
+
+    public function calculateGeneralScore($schoolYear)
+    {
+        return round(($this->calculateSemesterScore($schoolYear, 0) + $this->calculateSemesterScore($schoolYear, 1)) / 2, 2);
+    }
+
+    /**
+     * @param $schoolYear
+     * @return array|Student[]
+     */
+    public function getClassStudents($schoolYear)
+    {
+        return $this->getClassQuery($schoolYear)->all();
+    }
+
+    public function getRank($schoolYear)
+    {
+        $classStudents = $this->getClassStudents($schoolYear);
+        $generalScore = $this->calculateGeneralScore($schoolYear);
+        $rank = 1;
+        foreach ($classStudents as $student) {
+            if ($student->calculateGeneralScore($schoolYear) > $generalScore) {
+                $rank++;
+            }
+        }
+        return $rank;
+    }
+
+    public function getClassCount($schoolYear)
+    {
+        return self::find()->select('count(*)')
+            ->from('(' . $this->getClassQuery($schoolYear)->createCommand()->sql . ') x')
+            ->createCommand()->queryScalar();
+    }
+
+    /**
+     * @param $schoolYear
+     * @param string $semester
+     * @return \yii\db\ActiveQuery
+     */
+    private function getCoursesQuery($schoolYear, $semester = '')
+    {
+        return EducationalUnit::find()
+            ->select(['nature', 'code', 'semester', 'designation', 'coefficient', 'value'])
+            ->asArray()
+            ->join(
+                'JOIN',
+                Course::tableName(),
+                EducationalUnit::tableName() . '.educational_unit_id=' . Course::tableName() . '.educational_unit_id'
+            )->join(
+                'JOIN',
+                GradeReport::tableName(),
+                ['AND',
+                    GradeReport::tableName() . '.student_id=' . $this->student_id,
+                    GradeReport::tableName() . '.course_id=' . Course::tableName() . '.course_id',
+                    GradeReport::tableName() . '.date=' . $schoolYear
+                ]
+            )->join(
+                'JOIN',
+                Grade::tableName(),
+                GradeReport::tableName() . '.grade_id=' . Grade::tableName() . '.grade_id'
+            )->andFilterWhere(['semester' => $semester]);
+    }
+
+
+    private function getClassQuery($schoolYear)
+    {
+        return Student::find()
+            ->join(
+                'JOIN',
+                ClassGroup::tableName(),
+                Student::tableName() . '.class_group_id=' . ClassGroup::tableName() . '.class_group_id'
+            )->join(
+                'JOIN',
+                Level::tableName(),
+                [
+                    'AND',
+                    Level::tableName() . '.level_id=' . ClassGroup::tableName() . '.level_id',
+                    Level::tableName() . '.year=' . "'" . $this->year . "'",
+                ]
+            )->join(
+                'JOIN',
+                GradeReport::tableName(),
+                ['AND',
+                    GradeReport::tableName() . '.student_id=' . Student::tableName() . '.student_id',
+                    GradeReport::tableName() . '.date=' . $schoolYear,
+                ]
+            )->groupBy(Student::tableName() . '.student_id');
+    }
+
 }

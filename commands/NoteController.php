@@ -47,7 +47,7 @@ class NoteController extends Controller
             'date_of_birth' => '1996-12-16',
             'place_of_birth' => 'Chettia',
             'admission_date' => '2014-9-14',
-            'registration_number' => 'ST_SERIDI',
+            'registration_number' => '15/0052',
 
         ],
         [
@@ -59,7 +59,7 @@ class NoteController extends Controller
             'date_of_birth' => '1997-9-11',
             'place_of_birth' => 'Kouba',
             'admission_date' => '2014-9-14',
-            'registration_number' => 'ST_SIDALI',
+            'registration_number' => '15/0012',
 
         ],
     ];
@@ -192,52 +192,36 @@ class NoteController extends Controller
             $levelModel = new Level();
             $levelModel->year = $level['year'];
             $levelModel->option = $level['option'];
-            $levelModel->save();
+            if (!$levelModel->save()) {
+                var_dump($levelModel->errors);
+                throw new Exception('Could not save $levelModel');
+            }
             if ($level['year'] == '1CS') {
                 $levelId = $levelModel->level_id;
             }
         }
         echo 'Done Creating Levels , created ' . count($this->levels) . " levels\n";
 
-        foreach ($this->educationalUnits as $educationalUnit) {
-            $educationalUnitModel = new EducationalUnit();
-            $educationalUnitModel->code = $educationalUnit['code'];
-            $educationalUnitModel->nature = $educationalUnit['nature'];
-            $educationalUnitModel->semester = $educationalUnit['semester'];
-            $educationalUnitModel->level_id = $levelId;
-            $educationalUnitModel->save();
-            foreach ($educationalUnit['courses'] as $course) {
-                $courseModel = new Course();
-                $courseModel->designation = $course['designation'];
-                $courseModel->coefficient = $course['coefficient'];
-                $courseModel->credit = $course['credit'];
-                $courseModel->bonus = $course['bonus'];
-                $courseModel->educational_unit_id = $educationalUnitModel->educational_unit_id;
-                $grade = new Grade();
-                $grade->value = $course['note']['value'];
-                $grade->save();
-                $gradeReport = new GradeReport();
-                $gradeReport->course_id = $courseModel->course_id;
-                $gradeReport->grade_id = $grade->grade_id;
-                $gradeReport->student_id = $this->studentOneUserId;
-                $gradeReport->date = $course['note']['date'];
-                $gradeReport->save();
-            }
-        }
-        echo 'Done Creating Educational Units , created ' . count($this->educationalUnits) . " EUs\n";
 
         $firstGroupId = -1;
-        foreach ($this->sections as $section) {
+        foreach ($this->sections as $i => $section) {
             $sectionModel = new Section();
+            $sectionModel->section_id = ($i + 1);
             $sectionModel->section_name = $section['section_name'];
             $sectionModel->level_id = $levelId;
-            $sectionModel->save();
+            if (!$sectionModel->save()) {
+                var_dump($sectionModel->errors);
+                throw new Exception('Could not save $sectionModel');
+            }
             foreach ($section['groups'] as $group) {
                 $classGroup = new ClassGroup();
                 $classGroup->number = $group['number'];
                 $classGroup->section_id = $sectionModel->section_id;
                 $classGroup->level_id = $levelId;
-                $classGroup->save();
+                if (!$classGroup->save()) {
+                    var_dump($classGroup->errors);
+                    throw new Exception('Could not save $classGroup');
+                }
                 if ($firstGroupId == -1) {
                     $firstGroupId = $classGroup->class_group_id;
                 }
@@ -249,6 +233,46 @@ class NoteController extends Controller
         echo 'Created Student ' . $stOne->first_name . ' ' . $stOne->last_name . "\n";
         $stTwo = $this->createStudent(3, $this->studentTwoUserId, $firstGroupId + 1);
         echo 'Created Student ' . $stTwo->first_name . ' ' . $stTwo->last_name . "\n";
+
+        foreach ($this->educationalUnits as $educationalUnit) {
+            $educationalUnitModel = new EducationalUnit();
+            $educationalUnitModel->code = $educationalUnit['code'];
+            $educationalUnitModel->nature = $educationalUnit['nature'];
+            $educationalUnitModel->semester = $educationalUnit['semester'];
+            $educationalUnitModel->level_id = $levelId;
+            if (!$educationalUnitModel->save()) {
+                var_dump($educationalUnitModel->errors);
+                throw new Exception('Could not save $educationalUnitModel');
+            }
+            foreach ($educationalUnit['courses'] as $course) {
+                $courseModel = new Course();
+                $courseModel->designation = $course['designation'];
+                $courseModel->coefficient = $course['coefficient'];
+                $courseModel->credit = $course['credit'];
+                $courseModel->bonus = $course['bonus'];
+                $courseModel->educational_unit_id = $educationalUnitModel->educational_unit_id;
+                if (!$courseModel->save()) {
+                    var_dump($courseModel->errors);
+                    throw new Exception('Could not save $courseModel');
+                }
+                $grade = new Grade();
+                $grade->value = $course['note']['value'];
+                if (!$grade->save()) {
+                    var_dump($grade->errors);
+                    throw new Exception('Could not save $grade');
+                }
+                $gradeReport = new GradeReport();
+                $gradeReport->course_id = $courseModel->course_id;
+                $gradeReport->grade_id = $grade->grade_id;
+                $gradeReport->student_id = $stOne->student_id;
+                $gradeReport->date = $course['note']['date'];
+                if (!$gradeReport->save()) {
+                    var_dump($gradeReport->errors);
+                    throw new Exception('Could not save $gradeReport');
+                }
+            }
+        }
+        echo 'Done Creating Educational Units , created ' . count($this->educationalUnits) . " EUs\n";
     }
 
 
@@ -273,7 +297,10 @@ class NoteController extends Controller
         $password = new Password();
         $password->user_id = $user->id;
         $password->setPassword($this->defaultPassowrd);
-        $password->save();
+        if (!$password->save()) {
+            var_dump($password->errors);
+            throw new Exception('Could not save $password');
+        }
 
         return $user->id;
     }
@@ -285,7 +312,10 @@ class NoteController extends Controller
         $instructor->last_name = $this->users[$instNum]['lastname'];
         $instructor->registration_number = $this->users[$instNum]['registration_number'];
         $instructor->user_id = $userId;
-        $instructor->save();
+        if (!$instructor->save()) {
+            var_dump($instructor->errors);
+            throw new Exception('Could not save $instructor');
+        }
         return $instructor;
     }
 
@@ -300,6 +330,10 @@ class NoteController extends Controller
         $student->admission_date = $this->users[$stNum]['admission_date'];
         $student->class_group_id = $groupId;
         $student->user_id = $userId;
+        if (!$student->save()) {
+            var_dump($student->errors);
+            throw new Exception('Could not save $student');
+        }
         return $student;
     }
 }

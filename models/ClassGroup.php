@@ -14,6 +14,7 @@ use Yii;
  *
  * @property Section $section
  * @property Student[] $students
+ * @property Level $level
  */
 class ClassGroup extends \yii\db\ActiveRecord
 {
@@ -64,5 +65,13 @@ class ClassGroup extends \yii\db\ActiveRecord
     public function getStudents()
     {
         return $this->hasMany(Student::className(), ['class_group_id' => 'class_group_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLevel()
+    {
+        return $this->hasOne(Level::className(), ['level_id' => 'level_id']);
     }
 }
