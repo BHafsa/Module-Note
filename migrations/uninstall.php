@@ -4,21 +4,20 @@ use yii\db\Migration;
 
 class uninstall extends Migration
 {
-
     public function up()
     {
-        $this->dropTable('etudiant');
-        $this->dropTable('enseignerGroupe');
-        $this->dropTable('enseignerSection');
-        $this->dropTable('personneMorale');
-        $this->dropTable('enseignant');
-        $this->dropTable('groupe');
-        $this->dropTable('note');
-        $this->dropTable('releve');
-        $this->dropTable('section'); 
-        $this->dropTable('module'); 
-        $this->dropTable('ue');
-        $this->dropTable('niveau'); 
+        $this->dropTable('grade');
+        $this->dropTable('course');
+        $this->dropTable('student');
+        $this->dropTable('class_group');
+        $this->dropTable('tbl_instructor_section');
+        $this->dropTable('tbl_instructor_class_group');
+        $this->dropTable('grade_report');
+        $this->dropTable('section');
+        $this->dropTable('educational_unit');
+        $this->dropTable('level');
+        $this->dropTable('moral_person');
+        $this->dropTable('instructor');
     }
 
     public function down()
