@@ -12,12 +12,14 @@ class uninstall extends Migration
         $this->dropTable('class_group');
         $this->dropTable('tbl_instructor_section');
         $this->dropTable('tbl_instructor_class_group');
-        $this->dropTable('grade_report');
+        $this->dropTable('test');
         $this->dropTable('section');
         $this->dropTable('educational_unit');
         $this->dropTable('level');
         $this->dropTable('moral_person');
         $this->dropTable('instructor');
+        $this->dropTable('year');
+        $this->dropTable('option');
     }
 
     public function down()
