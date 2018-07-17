@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\note\models;
+namespace humhub\modules\note\models;
 
 use Yii;
 

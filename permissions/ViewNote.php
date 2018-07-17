@@ -5,6 +5,7 @@
  * @license https://www.humhub.com/licences
  */
 namespace humhub\modules\note\permissions;
+
 use humhub\modules\user\models\User;
 use humhub\modules\note\models\Student;
 
@@ -23,7 +24,8 @@ class ViewNote extends \humhub\libs\BasePermission
         return Student::find()
                       ->where(['user_id'=>\Yii::$app->user->id])
                       ->exists();
-    }
+        // return true;
+                }
     
     /**
      * @inheritdoc
