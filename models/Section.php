@@ -1,9 +1,8 @@
 <?php
 
-namespace humhub\modules\note\models;
+namespace app\modules\bulk_import\models;
 
 use Yii;
-use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "section".
@@ -11,10 +10,8 @@ use yii\db\ActiveRecord;
  * @property integer $section_id
  * @property integer $level_id
  * @property string $section_name
- *
- * @property ClassGroup[] $classGroups
  */
-class Section extends ActiveRecord
+class Section extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -42,13 +39,13 @@ class Section extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'section_id' => Yii::t('NoteModule.note', 'Section ID'),
-            'level_id' => Yii::t('NoteModule.note', 'Level ID'),
-            'section_name' => Yii::t('NoteModule.note', 'Section Name'),
+            'section_id' => 'Section ID',
+            'level_id' => 'Level ID',
+            'section_name' => 'Section Name',
         ];
     }
 
-    /**
+      /**
      * @return \yii\db\ActiveQuery
      */
     public function getClassGroups()

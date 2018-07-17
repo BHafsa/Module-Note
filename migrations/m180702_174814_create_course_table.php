@@ -13,7 +13,7 @@ class m180702_174814_create_course_table extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function SafeUp()
     {
         $this->createTable('course', [
             'course_id' => $this->primaryKey(),
@@ -22,7 +22,7 @@ class m180702_174814_create_course_table extends Migration
             'credit' => $this->integer(10),
             'bonus' => $this->integer(10),
             'educational_unit_id' => $this->integer(),
-        ]);
+        ],'ENGINE=MyISAM');
 
         // creates index for column `educational_unit_id`
         $this->createIndex(

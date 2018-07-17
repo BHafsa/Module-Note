@@ -14,19 +14,17 @@ class m180702_174500_create_student_table extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function SafeUp()
     {
         $this->createTable('student', [
             'student_id' => $this->primaryKey(),
             'registration_number' => $this->string(15)->notNull()->unique(),
-            'last_name' => $this->string(30)->notNull(),
-            'first_name' => $this->string(30)->notNull(),
             'date_of_birth' => $this->date()->notNull(),
             'place_of_birth' => $this->string(15)->notNull(),
             'admission_date' => $this->date(),
             'class_group_id' => $this->integer()->notNull(),
             'user_id' => $this->integer()->notNull(),
-        ]);
+        ],'ENGINE=MyISAM');
 
         // creates index for column `class_group_id`
         $this->createIndex(

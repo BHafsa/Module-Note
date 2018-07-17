@@ -1,20 +1,17 @@
 <?php
 
-namespace humhub\modules\note\models;
+namespace app\modules\bulk_import\models;
 
 use Yii;
-use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "level".
  *
  * @property integer $level_id
- * @property string $year
- * @property string $option
- *
- * @property EducationalUnit[] $educationalUnits
+ * @property integer $year_id
+ * @property integer $option_id
  */
-class Level extends ActiveRecord
+class Level extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -30,9 +27,8 @@ class Level extends ActiveRecord
     public function rules()
     {
         return [
-            [['year'], 'required'],
-            [['year'], 'string', 'max' => 10],
-            [['option'], 'string', 'max' => 20],
+            [['year_id'], 'required'],
+            [['year_id', 'option_id'], 'integer'],
         ];
     }
 
@@ -42,13 +38,13 @@ class Level extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'level_id' => Yii::t('NoteModule.note', 'Level ID'),
-            'year' => Yii::t('NoteModule.note', 'Year'),
-            'option' => Yii::t('NoteModule.note', 'Option'),
+            'level_id' => 'Level ID',
+            'year_id' => 'Year ID',
+            'option_id' => 'Option ID',
         ];
     }
 
-    /**
+     /**
      * @return \yii\db\ActiveQuery
      */
     public function getEducationalUnits()

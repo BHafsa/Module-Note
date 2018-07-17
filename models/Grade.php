@@ -1,17 +1,20 @@
 <?php
 
-namespace humhub\modules\note\models;
+namespace app\modules\bulk_import\models;
 
 use Yii;
-use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "grade".
  *
- * @property integer $grade_id
+ * @property integer $student_id
+ * @property integer $instructor_id
+ * @property integer $course_id
+ * @property integer $test_id
  * @property double $value
+ * @property string $date
  */
-class Grade extends ActiveRecord
+class Grade extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -27,7 +30,10 @@ class Grade extends ActiveRecord
     public function rules()
     {
         return [
+            [['student_id', 'instructor_id', 'course_id', 'test_id', 'value', 'date'], 'required'],
+            [['student_id', 'instructor_id', 'course_id', 'test_id'], 'integer'],
             [['value'], 'number'],
+            [['date'], 'safe'],
         ];
     }
 
@@ -37,8 +43,12 @@ class Grade extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'grade_id' => Yii::t('NoteModule.note', 'Grade ID'),
-            'value' => Yii::t('NoteModule.note', 'Value'),
+            'student_id' => 'Student ID',
+            'instructor_id' => 'Instructor ID',
+            'course_id' => 'Course ID',
+            'test_id' => 'Test ID',
+            'value' => 'Value',
+            'date' => 'Date',
         ];
     }
 }

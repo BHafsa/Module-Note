@@ -10,14 +10,14 @@ class m180702_173416_create_class_group_table extends Migration
     /**
      * @inheritdoc
      */
-    public function safeUp()
+    public function SafeUp()
     {
         $this->createTable('class_group', [
             'class_group_id' => $this->primaryKey(),
-            'number' => $this->integer(5)->notNull(),
             'section_id' => $this->integer()->notNull(),
             'level_id' => $this->integer()->notNull(),
-        ]);
+            'date' => $this->date(),
+        ],'ENGINE=MyISAM');
 
         $this->createIndex(
             'index-class_group-section',

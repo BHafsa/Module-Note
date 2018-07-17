@@ -1,22 +1,17 @@
 <?php
 
-namespace humhub\modules\note\models;
+namespace app\modules\bulk_import\models;
 
 use Yii;
-use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "educational_unit".
  *
  * @property integer $educational_unit_id
  * @property string $code
- * @property string $nature
  * @property integer $semester
- * @property integer $level_id
- *
- * @property Level $level
  */
-class EducationalUnit extends ActiveRecord
+class EducationalUnit extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -32,10 +27,9 @@ class EducationalUnit extends ActiveRecord
     public function rules()
     {
         return [
-            [['code', 'nature', 'level_id'], 'required'],
-            [['semester', 'level_id'], 'integer'],
-            [['code', 'nature'], 'string', 'max' => 30],
-            [['level_id'], 'exist', 'skipOnError' => true, 'targetClass' => Level::className(), 'targetAttribute' => ['level_id' => 'level_id']],
+            [['code'], 'required'],
+            [['semester'], 'integer'],
+            [['code'], 'string', 'max' => 10],
         ];
     }
 
@@ -45,15 +39,12 @@ class EducationalUnit extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'educational_unit_id' => Yii::t('NoteModule.note', 'Educational Unit ID'),
-            'code' => Yii::t('NoteModule.note', 'Code'),
-            'nature' => Yii::t('NoteModule.note', 'Nature'),
-            'semester' => Yii::t('NoteModule.note', 'Semester'),
-            'level_id' => Yii::t('NoteModule.note', 'Level ID'),
+            'educational_unit_id' => 'Educational Unit ID',
+            'code' => 'Code',
+            'semester' => 'Semester',
         ];
     }
-
-    /**
+     /**
      * @return \yii\db\ActiveQuery
      */
     public function getCourses()

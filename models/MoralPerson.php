@@ -1,8 +1,7 @@
 <?php
 
-namespace humhub\modules\note\models;
+namespace app\modules\bulk_import\models;
 
-use humhub\modules\user\models\User;
 use Yii;
 
 /**
@@ -10,8 +9,6 @@ use Yii;
  *
  * @property integer $moral_person_id
  * @property integer $user_id
- *
- * @property User $user
  */
 class MoralPerson extends \yii\db\ActiveRecord
 {
@@ -31,7 +28,6 @@ class MoralPerson extends \yii\db\ActiveRecord
         return [
             [['user_id'], 'required'],
             [['user_id'], 'integer'],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -41,12 +37,12 @@ class MoralPerson extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'moral_person_id' => Yii::t('NoteModule.note', 'Moral Person ID'),
-            'user_id' => Yii::t('NoteModule.note', 'User ID'),
+            'moral_person_id' => 'Moral Person ID',
+            'user_id' => 'User ID',
         ];
     }
 
-    /**
+     /**
      * @return \yii\db\ActiveQuery
      */
     public function getUser()

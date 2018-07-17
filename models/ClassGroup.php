@@ -1,6 +1,6 @@
 <?php
 
-namespace humhub\modules\note\models;
+namespace app\modules\bulk_import\models;
 
 use Yii;
 
@@ -8,13 +8,9 @@ use Yii;
  * This is the model class for table "class_group".
  *
  * @property integer $class_group_id
- * @property integer $number
  * @property integer $section_id
  * @property integer $level_id
- *
- * @property Section $section
- * @property Student[] $students
- * @property Level $level
+ * @property string $date
  */
 class ClassGroup extends \yii\db\ActiveRecord
 {
@@ -32,9 +28,9 @@ class ClassGroup extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['number', 'section_id', 'level_id'], 'required'],
-            [['number', 'section_id', 'level_id'], 'integer'],
-            [['section_id', 'level_id'], 'exist', 'skipOnError' => true, 'targetClass' => Section::className(), 'targetAttribute' => ['section_id' => 'section_id', 'level_id' => 'level_id']],
+            [['section_id', 'level_id'], 'required'],
+            [['section_id', 'level_id'], 'integer'],
+            [['date'], 'safe'],
         ];
     }
 
@@ -44,14 +40,13 @@ class ClassGroup extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'class_group_id' => Yii::t('NoteModule.note', 'Class Group ID'),
-            'number' => Yii::t('NoteModule.note', 'Number'),
-            'section_id' => Yii::t('NoteModule.note', 'Section ID'),
-            'level_id' => Yii::t('NoteModule.note', 'Level ID'),
+            'class_group_id' => 'Class Group ID',
+            'section_id' => 'Section ID',
+            'level_id' => 'Level ID',
+            'date' => 'Date',
         ];
     }
-
-    /**
+     /**
      * @return \yii\db\ActiveQuery
      */
     public function getSection()

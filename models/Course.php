@@ -1,9 +1,8 @@
 <?php
 
-namespace humhub\modules\note\models;
+namespace app\modules\bulk_import\models;
 
 use Yii;
-use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "course".
@@ -14,10 +13,8 @@ use yii\db\ActiveRecord;
  * @property integer $credit
  * @property integer $bonus
  * @property integer $educational_unit_id
- *
- * @property EducationalUnit $educationalUnit
  */
-class Course extends ActiveRecord
+class Course extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -36,7 +33,6 @@ class Course extends ActiveRecord
             [['coefficient'], 'required'],
             [['coefficient', 'credit', 'bonus', 'educational_unit_id'], 'integer'],
             [['designation'], 'string', 'max' => 30],
-            [['educational_unit_id'], 'exist', 'skipOnError' => true, 'targetClass' => EducationalUnit::className(), 'targetAttribute' => ['educational_unit_id' => 'educational_unit_id']],
         ];
     }
 
@@ -46,16 +42,15 @@ class Course extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'course_id' => Yii::t('NoteModule.note', 'Course ID'),
-            'designation' => Yii::t('NoteModule.note', 'Designation'),
-            'coefficient' => Yii::t('NoteModule.note', 'Coefficient'),
-            'credit' => Yii::t('NoteModule.note', 'Credit'),
-            'bonus' => Yii::t('NoteModule.note', 'Bonus'),
-            'educational_unit_id' => Yii::t('NoteModule.note', 'Educational Unit ID'),
+            'course_id' => 'Course ID',
+            'designation' => 'Designation',
+            'coefficient' => 'Coefficient',
+            'credit' => 'Credit',
+            'bonus' => 'Bonus',
+            'educational_unit_id' => 'Educational Unit ID',
         ];
     }
-
-    /**
+     /**
      * @return \yii\db\ActiveQuery
      */
     public function getEducationalUnit()
