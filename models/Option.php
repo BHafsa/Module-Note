@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\bulk_import\models;
+namespace app\modules\note\models;
 
 use Yii;
 
